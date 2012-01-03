@@ -1,0 +1,26 @@
+!Machine 64
+!Kernel k
+!Param 8 2
+!Param 4
+
+MOV R15, 123;
+LEPC R0;
+MOV R1, 0x1;
+MOV32I R10, 0x7c03dde4
+MOV32I R11, 0x2800c61a
+IADD R0, R0, -8;
+ST.E.64 [R0], R10;
+LD.E.64 R6, [R0];
+LEPC R2;
+LEPC R3;
+MOV R4, c[0X0][0X20]
+MOV R5, c[0X0][0X24]
+ST.E [R4+0X0], R6;
+ST.E [R4+0X4], R7
+ST.E [R4+0X8], R0
+ST.E [R4+0Xc], R2
+ST.E [R4+0X10], R3
+ST.E [R4+0x14], R15
+
+EXIT;
+!EndKernel

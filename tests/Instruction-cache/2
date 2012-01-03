@@ -1,0 +1,46 @@
+!Machine 64
+!Kernel k
+!Param 8 2
+!Param 4
+
+S2R R0, SR_ClockLo
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+S2R R1, SR_ClockLo
+IADD R0, R1, -R0
+MOV R10, c[0x0][0x20]
+MOV R11, c[0x0][0x24]
+ST.E [R10], R0
+EXIT
+!EndKernel
+

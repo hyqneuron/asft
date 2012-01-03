@@ -1,0 +1,4 @@
+!Kernel k
+MOV R15, 99999
+
+!EndKernel

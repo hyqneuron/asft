@@ -1,0 +1,39 @@
+!Machine 64
+
+!Kernel k
+!Param 8 2
+!Param 4
+
+
+NOP
+S2R R0, SR_ClockLo;
+FADD R2, R1, R1;
+NOP
+FADD RZ, RZ, R2;
+S2R R10, SR_ClockLo;
+S2R R11, SR_ClockLo;
+S2R R12, SR_ClockLo;
+S2R R13, SR_ClockLo;
+IADD R20, R10, RZ;
+IADD R21, R11, RZ;
+IADD R22, R12, RZ;
+IADD R23, R13, RZ;
+
+S2R R5, SR_Tid_X;
+LOP.AND R5, R5, 0x1f; 
+ISETP.NE P0, pt, R5, RZ;
+@P0 EXIT;
+S2R R5, SR_Tid_X;
+SHR R5, R5, 5;//WarpID 
+MOV R10, c[0x0][0x20];
+MOV R11, c[0x0][0x24];
+IMAD R10, R5, 0x14, R10;
+ST.E [R10], R0;
+ST.E [R10+0x4], R20;
+ST.E [R10+0x8], R21;
+ST.E [R10+0xc], R22;
+ST.E [R10+0x10], R23;
+
+EXIT;
+
+!EndKernel

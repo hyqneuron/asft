@@ -3,13 +3,11 @@
 "BASIC SETTINGS
 "=========================
 "=========================
-set nu linebreak
-set display=lastline
-set tw=0
-set wm=0
+set nu linebreak wrap!
 set smartindent
 filetype plugin on
 command! ReloadVIMRC source $MYVIMRC
+hi PmenuSel ctermfg=black
 
 "============
 "OmniCppComplete
@@ -28,12 +26,22 @@ let OmniCpp_SelectFirstItem = 2 " select first pop up item without inserting it 
 let OmniCpp_LocalSearchDecl = 1 " use smarter local definition search
 let OmniCpp_DefaultNamespaces = ["std"]
 
+"Use arror keys to nativage the pop up menu
+"inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
+inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
+inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 
+"============
+"Other completion related
+"============
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 "============
 "QuickMove
 "============
-imap <F2> <C-o>:call ToggleInsertMove()<CR>
+imap <F2> <C-o>:call ToggleQuickMove()<CR>
 map <F2> :call ToggleQuickMove()<CR>
 
 "============
@@ -91,8 +99,6 @@ function! SetGMove()
 	map k gk
 	map <Up> gk
 	map <Down> gj
-	imap <Up> <C-o>gk
-	imap <Down> <C-o>gj
 endfunction
 call SetGMove()
 function! UnSetGMove()
@@ -100,8 +106,6 @@ function! UnSetGMove()
 	unmap k 
 	unmap <Up> 
 	unmap <Down> 
-	iunmap <Up> 
-	iunmap <Down> 
 endfunction
 
 "============

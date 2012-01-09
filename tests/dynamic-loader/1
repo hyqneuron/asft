@@ -1,0 +1,62 @@
+!Machine 64
+!Kernel k
+!Param 8 2
+!Param 4
+
+//R0,R1: instruction addr
+//R2,R3: addr of cubin in device mem
+//R4: size of cubin
+//R5: size of cubin already inserted
+//R6: stores a word of cubin
+//P1: whether path already executed. false=not, true=already executed
+
+//Initialization. Set P1=false
+PSETP.AND P1, pt, pt, !pt;
+
+//set instruction addr of insertion point
+BRA !POOL; 		//goto POOL to have R0 set as starting addr first
+
+//when it comes back here the first time, R0 is loaded with the addr of POOL
+!Label CONT
+@P1 EXIT;
+PSETP.AND P1, pt, pt, pt; 		//set P1 as true, so that next time !CONT is reached program will just return.
+MOV R1, 0x1; 		//set the higher word to 0x1
+
+//now load the addr of cubin in device mem
+MOV R2, c[0x0][0x20];
+MOV R3, c[0x0][0x24];
+//load size of cubin, c[0x0][0x28~0x2f] is unused
+MOV R4, c[0x0][0x30];
+//set size of cubin already inserted=0
+MOV R5, RZ;
+
+//Start loop:load, store, increment, check; assuming size>0 and divisible by 4
+!Label LOOP_LOAD
+LD.E R6, [R2]; 		//load
+ST.E [R0], R6; 		//store
+IADD R5, R5, 4; 	//increment
+IADD R2, R2, 4;
+ISETP.EQ P0, pt, R5, R4; //check
+@!P0 BRA !LOOP_LOAD;
+MEMBAR.GL;
+
+//When execution reaches here, storage is already done.
+//Now branch to point of insertion
+BRA !POOL;
+
+
+
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+
+!Label POOL
+LEPC R0;
+BRA !CONT;
+        NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+EXIT;
+!EndKernel

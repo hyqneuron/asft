@@ -1,0 +1,7 @@
+!Kernel k
+MOV R0, c[0x0][0x28];
+MOV R1, c[0x0][0x2c];
+MOV R2, 12321;
+ST.E [R0], R2;
+EXIT;
+!EndKernel

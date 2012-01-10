@@ -2,31 +2,32 @@
 !Kernel k
 !Param 8 2
 !Param 4
+/*
+First 8byte argument: addr of cubin in device mem
+Second 8-byte argument: device mem pointer for output(to be used by the loaded kernel)
+Last 4-byte argument: size of cubin to load
 
-//R0,R1: instruction addr
-//R2,R3: addr of cubin in device mem
-//R4: size of cubin
-//R5: size of cubin already inserted
-//R6: stores a word of cubin
-//P1: whether path already executed. false=not, true=already executed
+R0,R1: instruction addr
+R2,R3: addr of cubin in device mem
+R4: size of cubin
+R5: size of cubin already inserted
+R6: stores a word of cubin
+*/
 
-//Initialization. Set P1=false
-PSETP.AND P1, pt, pt, !pt;
-
-//set instruction addr of insertion point
-BRA !POOL; 		//goto POOL to have R0 set as starting addr first
-
-//when it comes back here the first time, R0 is loaded with the addr of POOL
-!Label CONT
-@P1 EXIT;
-PSETP.AND P1, pt, pt, pt; 		//set P1 as true, so that next time !CONT is reached program will just return.
-MOV R1, 0x1; 		//set the higher word to 0x1
+//Load current instruction addr into R0,R1
+LEPC R0;
+MOV R1, 1;
+//calculate the addr of !POOL
+IADD R0, R0, 0x580; //now R0 points to the EXIT around 40 lines down from here. Changing EXIT to NOP shouldn't make a difference.
+ 			//I set it as EXIT so that it's easier to find the mark.
 
 //now load the addr of cubin in device mem
 MOV R2, c[0x0][0x20];
 MOV R3, c[0x0][0x24];
-//load size of cubin, c[0x0][0x28~0x2f] is unused
+
+//load size of cubin, c[0x0][0x28~0x2f] is unused for now
 MOV R4, c[0x0][0x30];
+
 //set size of cubin already inserted=0
 MOV R5, RZ;
 
@@ -36,25 +37,30 @@ LD.E R6, [R2]; 		//load
 ST.E [R0], R6; 		//store
 IADD R5, R5, 4; 	//increment
 IADD R2, R2, 4;
+IADD R0, R0, 4;
 ISETP.EQ P0, pt, R5, R4; //check
 @!P0 BRA !LOOP_LOAD;
 MEMBAR.GL;
 
 //When execution reaches here, storage is already done.
 //Now branch to point of insertion
-BRA !POOL;
+BRA !POOL; //labels for now are only supported by the execution control instructions, so previously I had to calculate addr of !POOL using IADD..
+	//and the offset 0x580 was found out by looking for the location of the EXIT after I had assembled the kernel for the first time.
 
 
 
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
 NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
 NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
 NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
 NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
 
 !Label POOL
-LEPC R0;
-BRA !CONT;
-        NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
+NOP;  //I put EXIT here so I'd know which instruction to look for. Setting it to NOP should make no difference.
+    NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
 NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
 NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;
 NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;NOP;

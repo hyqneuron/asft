@@ -111,7 +111,21 @@ int main( int argc, char** argv)
 		else if(choice==2)
 			odd = false;
 	}
-	CUdeviceptr gpu_output;
+	unsigned int cpu_cubin_content[10];
+	cpu_cubin_content[0]=0xa0001de4;
+	cpu_cubin_content[1]=0x28004000;
+	cpu_cubin_content[2]=0xb0005de4;
+	cpu_cubin_content[3]=0x28004000;
+	//48009de4 2800c013
+	cpu_cubin_content[4]=0x48009de4;
+	cpu_cubin_content[5]=0x2800c013;
+	cpu_cubin_content[6]=0x00009c85;
+	cpu_cubin_content[7]=0x94000000;
+	cpu_cubin_content[8]=0x00001de7;
+	cpu_cubin_content[9]=0x80000000;
+	unsigned int cubin_size=40;
+
+	CUdeviceptr gpu_output, gpu_cubin_content;
 	CUdevice device;
 	CUcontext context;
 
@@ -119,6 +133,8 @@ int main( int argc, char** argv)
 	muRC(95, cuDeviceGet(&device, 0));
 	muRC(92, cuCtxCreate(&context, CU_CTX_SCHED_SPIN, device));
 	muRC(90, cuMemAlloc(&gpu_output, size));
+	muRC(900, cuMemAlloc(&gpu_cubin_content, cubin_size));
+	muRC(901, cuMemcpyHtoD(gpu_cubin_content, cpu_cubin_content, cubin_size));
 
 	CUevent eStart, eStop;
 	muRC(89, cuEventCreate(&eStart, CU_EVENT_DEFAULT));
@@ -131,7 +147,8 @@ int main( int argc, char** argv)
 	muRC(1, result); 
 	int param = 0x1010;
 	muRC(2, cuParamSetSize(kernel, 20));
-	muRC(3, cuParamSetv(kernel, 0, &gpu_output, 8));
+	muRC(3, cuParamSetv(kernel, 0, &gpu_cubin_content, 8));
+	muRC(3, cuParamSetv(kernel, 8, &gpu_output, 8));
 	muRC(3, cuParamSetv(kernel, 16, &param, 4));
 	muRC(4, cuFuncSetBlockShape(kernel, tcount,1,1));
 

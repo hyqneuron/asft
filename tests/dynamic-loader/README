@@ -1,0 +1,9 @@
+launch it using this command-line:
+./main 1.k k 1
+
+
+main.cu, main: the launcher utility
+loadee.asf: ASM source for kernel to be loaded
+loadee.k: cubin assembled from loadee.asf
+the kernel in loadee.k modifies the memory content at the address specified by c[0x0][0x28~2f] to 1234
+main then outputs that memory content.

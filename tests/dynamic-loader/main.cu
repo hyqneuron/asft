@@ -133,6 +133,8 @@ int main( int argc, char** argv)
 	muRC(95, cuDeviceGet(&device, 0));
 	muRC(92, cuCtxCreate(&context, CU_CTX_SCHED_SPIN, device));
 	muRC(90, cuMemAlloc(&gpu_output, size));
+	int fakenumber=0xffffffff;
+	muRC(9000, cuMemcpyHtoD(gpu_output, &fakenumber, 4));
 	muRC(900, cuMemAlloc(&gpu_cubin_content, cubin_size));
 	muRC(901, cuMemcpyHtoD(gpu_cubin_content, cpu_cubin_content, cubin_size));
 
@@ -149,7 +151,7 @@ int main( int argc, char** argv)
 	muRC(2, cuParamSetSize(kernel, 20));
 	muRC(3, cuParamSetv(kernel, 0, &gpu_cubin_content, 8));
 	muRC(3, cuParamSetv(kernel, 8, &gpu_output, 8));
-	muRC(3, cuParamSetv(kernel, 16, &param, 4));
+	muRC(3, cuParamSetv(kernel, 16, &cubin_size, 4));
 	muRC(4, cuFuncSetBlockShape(kernel, tcount,1,1));
 
 	muRC(41, cuEventRecord(eStart,0) );

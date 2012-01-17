@@ -14,6 +14,7 @@ hi PmenuSel ctermfg=black
 "============
 set completeopt=menuone,menu,longest,preview
 command! BuildTags !ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q 
+map <C-F12> :BuildTags<CR>
 set tags+=~/.vim/tags/cpp
 let OmniCpp_NamespaceSearch = 2 "2: search in all buffers. 1: search in current buffer only
 let OmniCpp_GlobalScopeSearch = 1
@@ -49,6 +50,17 @@ map <F2> :call ToggleQuickMove()<CR>
 "============
 au BufRead,BufNewFile t\d\+\.txt set ft=thought
 
+
+"============
+"Meta mapping
+"============
+" fix meta-keys which generate <Esc>a .. <Esc>z
+let c='a'
+while c <= 'z'
+exec "set <M-".toupper(c).">=\e".c
+	exec "imap \e".c." <M-".toupper(c).">"
+	let c = nr2char(1+char2nr(c))
+endw
 
 "=========================
 "=========================

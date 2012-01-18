@@ -5,8 +5,10 @@
 "=========================
 set nu linebreak wrap!
 set smartindent
+set clipboard=unnamed
 filetype plugin on
 command! ReloadVIMRC source $MYVIMRC
+command! EditVIMRC tabe ~/.vimrc
 hi PmenuSel ctermfg=black
 
 "============

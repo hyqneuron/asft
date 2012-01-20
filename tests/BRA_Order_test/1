@@ -1,0 +1,30 @@
+!Machine 64
+!Kernel k
+!Param 8 2
+!Param 4
+!Shared 8
+
+S2R R10, SR_ClockLo;	//R10: first clock
+SSY !EXT
+
+!Label BeginLock
+LDSLK P0, R1, [0x0];
+@P0 BRA !LockedRegion
+@!P0 BRA !BeginLock;
+!Label LockedRegion
+S2R R11, SR_ClockLo;	//R11: second clock, inside lock
+IADD R12, R11, -R10;	//R12 = R11 - R10, second - first
+
+
+
+S2R R0, SR_Tid_X;
+MOV R2, c[0x0][0x20]
+MOV R3, c[0x0][0x24]
+IMAD R2, R0, 4, R2; //R2 = tidx * 4 + R2
+ST.E [R2], R12;
+STSUL [0x0], R1;
+!Label EXT
+EXIT;
+
+
+!EndKernel

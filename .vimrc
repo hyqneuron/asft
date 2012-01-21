@@ -28,6 +28,7 @@ let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
 let OmniCpp_SelectFirstItem = 2 " select first pop up item without inserting it to text
 let OmniCpp_LocalSearchDecl = 1 " use smarter local definition search
 let OmniCpp_DefaultNamespaces = ["std"]
+imap <C-n> <C-x><C-n>
 
 "Use arror keys to nativage the pop up menu
 "inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"

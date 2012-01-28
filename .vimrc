@@ -9,7 +9,7 @@ set clipboard=unnamed
 filetype plugin on
 command! ReloadVIMRC source $MYVIMRC
 command! EditVIMRC tabe ~/.vimrc
-hi PmenuSel ctermfg=black
+hi PmenuSel ctermfg=black ctermbg=white
 
 "============
 "OmniCppComplete
@@ -17,7 +17,8 @@ hi PmenuSel ctermfg=black
 set completeopt=menuone,menu,longest,preview
 command! BuildTags !ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q 
 map <C-F12> :BuildTags<CR>
-set tags+=~/.vim/tags/cpp
+au BufRead,BufNewFile *.cpp set tags+=~/.vim/tags/cpp
+au BufRead,BufNewFile *.h set tags+=~/.vim/tags/cpp
 let OmniCpp_NamespaceSearch = 2 "2: search in all buffers. 1: search in current buffer only
 let OmniCpp_GlobalScopeSearch = 1
 let OmniCpp_ShowAccess = 1
@@ -28,7 +29,7 @@ let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
 let OmniCpp_SelectFirstItem = 2 " select first pop up item without inserting it to text
 let OmniCpp_LocalSearchDecl = 1 " use smarter local definition search
 let OmniCpp_DefaultNamespaces = ["std"]
-imap <C-n> <C-x><C-n>
+set omnifunc=syntaxcomplete#Complete
 
 "Use arror keys to nativage the pop up menu
 "inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
@@ -148,5 +149,3 @@ function! UnSetWinSwitch()
 	unmap <C-j>
 	unmap <C-k>
 endfunction
-
-

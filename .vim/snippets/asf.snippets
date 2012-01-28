@@ -1,0 +1,49 @@
+#Clocks
+snippet clkl
+	SR_ClockLo
+
+snippet clkh
+	SR_ClockHi
+
+#Tids
+snippet tidx
+	SR_Tid_X
+
+snippet tidy
+	SR_Tid_Y
+
+snippet tidz
+	SR_Tid_Z
+
+#ntids
+snippet ntidx
+	SR_NTid_X
+
+snippet ntidy
+	SR_NTid_Y
+
+snippet ntidz
+	SR_NTid_Z
+
+#CTA IDs
+snippet blockidx
+	SR_CTAid_X
+
+snippet blockidy
+	SR_CTAid_Y
+
+snippet blockidz
+	SR_CTAid_Z
+
+#Instructions
+snippet iadd
+	IADD R${1}, R${2}, R${3};
+snippet s2r
+	S2R R${1}, ${2:SR_};
+snippet ex
+	EXIT;
+
+#Others
+snippet c
+	c[0x${1:20}][0x${2}]
+

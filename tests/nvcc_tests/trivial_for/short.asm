@@ -19,12 +19,14 @@
 	LD.E R0, [R2];
 	LD.E R1, [R2+0x4];
 	IADD R6, R6, 0x2;
-	IADD R4, R4, 0x8; //easy mover
+	IADD R4, R4, 0x8; //this instruction moved up to reduce stalling at line 24.
+			  //because of this move, line 16 and 36 are added
 	//need value of R0
 	SHL R0, R0, 0x4;
 	SHL R1, R1, 0x4;
 	ISETP.LE.AND P0, pt, R6, c[0x0][0x30], pt;
-	IADD R2, R2, 0x8; //easy mover
+	IADD R2, R2, 0x8; //this kind of instruction can be moved anywhere in the 
+			  //loop to reduce stalling
 	//Need value of R0
 	ST.E [R4], R0;
 	ST.E [R4+0x4], R1;

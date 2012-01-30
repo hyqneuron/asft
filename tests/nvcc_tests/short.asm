@@ -3,16 +3,16 @@
 !Param 8 2
 !Param 4
 
+	ISETP.GE.AND P0, pt, RZ, c[0x0][0x30]; //if 0>= count
+	MOV R0, 1;
 	MOV R2, c[0x0][0x20];
 	MOV R3, c[0x0][0x24];
+	@P0 EXIT;
+	ISETP.EQ.AND P0, pt, R0, c[0x0][0x30]; //if 1 == count
 	MOV R4, c[0x0][0x28];
 	MOV R5, c[0x0][0x2c];
-	ISETP.GE.AND P0, pt, RZ, c[0x0][0x30]; //if 0>= count
-	@P0 EXIT;
-	MOV R0, 1;
-	ISETP.EQ.AND P0, pt, R0, c[0x0][0x30]; //if 1 == count
-	@P0 BRA !ENDLOOP
 	MOV R6, 0x2; //R6 = counter = 2
+	@P0 BRA !ENDLOOP
 	IADD R4, R4, -0x8;
 
 !Label LOOP

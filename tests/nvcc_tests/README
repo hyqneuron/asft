@@ -1,0 +1,14 @@
+This is a trivial case of single-thread optimization.
+
+Kernel involved:
+__global__ void k(int *input, int *output, int count)
+{
+	for(int i =0; i<count; i++)
+		output[i]=input[i]*16;
+}
+
+Performance:
+command      : time taken to run
+make original: 1032ms
+make short   : 575 ms, 1.8x speed-up //involves an optimization that is not safe for huge array
+make long    : 591 ms, 1.7x speed-up //safe

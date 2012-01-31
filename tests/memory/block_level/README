@@ -1,0 +1,8 @@
+Test for single-block peak memory throughput
+
+1: 28 LDs per iteration, 1 64-bit Address register
+2: 26 LDs per iteration, 2 64-bit Address register
+3: 24 LDs per iteration, 3 64-bit Address register
+
+Results:
+All 3 tests achieve a peak throughput of roughly 20.7 to 20.8 GB/s

@@ -123,6 +123,8 @@ int main( int argc, char** argv)
 	muRC(100, cuInit(0));
 	muRC(95, cuDeviceGet(&device, 0));
 	muRC(92, cuCtxCreate(&context, CU_CTX_SCHED_SPIN, device));
+	//muRC(91, cuCtxSetCacheConfig(CU_FUNC_CACHE_PREFER_SHARED));
+	muRC(91, cuCtxSetCacheConfig(CU_FUNC_CACHE_PREFER_EQUAL));
 	muRC(90, cuMemAlloc(&gpu_output, size));
 
 	CUevent eStart, eStop;

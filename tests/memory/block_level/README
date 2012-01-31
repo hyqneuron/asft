@@ -1,8 +1,17 @@
 Test for single-block peak memory throughput
 
-1: 28 LDs per iteration, 1 64-bit Address register
-2: 26 LDs per iteration, 2 64-bit Address register
-3: 24 LDs per iteration, 3 64-bit Address register
+make run1: 28 LDs per iteration, 1 64-bit Address register
+make run2: 26 LDs per iteration, 2 64-bit Address register
+make run3: 24 LDs per iteration, 3 64-bit Address register
+
+make run1 MAIN=mainL1: 48K L1
+make run1 MAIN=mainEQ: 32K L1
+make run1 MAIN=mainSM: 16K L1
+
+make run1cg: similar to run1, but all LDs use .CG modifier (cache global)
 
 Results:
-All 3 tests achieve a peak throughput of roughly 20.7 to 20.8 GB/s
+Device is a GTX 480, clocks unknown
+1. All 3 tests(run1, run2, run3) achieve a peak throughput of roughly 20.7 to 20.8 GB/s
+2. mainSM and mainEQ are slightly faster than mainL1
+3. run1cg achieved highest throughput of 21.4 GB/s

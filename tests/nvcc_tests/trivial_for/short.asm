@@ -43,3 +43,17 @@
 	EXIT;
 
 !EndKernel
+
+/*
+if count <=0 return
+if count ==1 goto process1
+
+counter = toexecute(2)
+process2
+counter += 2
+if counter<=count goto process2
+count += 1
+if counter!=count return
+
+process1
+*/

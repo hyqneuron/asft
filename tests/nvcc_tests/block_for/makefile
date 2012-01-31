@@ -15,3 +15,6 @@ original: 1.k main
 
 short: short.k main
 	./main short.k k $(CYCLES) $(THREADS)
+
+clean:
+	rm -Rf main *.k

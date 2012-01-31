@@ -22,4 +22,4 @@ long: long.k main
 	./main long.k k $(CYCLES)
 
 clean:
-	rm *.k main --force
+	rm -Rf *.k main 

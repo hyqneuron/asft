@@ -6,6 +6,7 @@
 set nu linebreak wrap!
 set smartindent
 set hlsearch
+set autochdir
 set clipboard=unnamed
 filetype plugin on
 command! ReloadVIMRC source $MYVIMRC

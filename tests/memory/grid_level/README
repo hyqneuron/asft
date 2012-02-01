@@ -1,4 +1,4 @@
-Test for single-block peak memory throughput
+Test for grid-level peak memory throughput
 
 make run1: 16 LDs per iteration, 1 64-bit Address register
 make run2: 26 LDs per iteration, 2 64-bit Address register

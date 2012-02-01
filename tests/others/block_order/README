@@ -1,0 +1,4 @@
+Block launch pattern test.
+
+make k to see pattern. (or use make k BLOCKS=number of blocks)
+make kkk to see smid count

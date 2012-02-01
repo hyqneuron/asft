@@ -1,0 +1,25 @@
+!Machine 64
+
+!Kernel k
+!Param 8 2
+!Param 4
+	S2R R0, SR_VirtId;
+	BFE R0, R0, 0x914; //Getting smid into R0
+	S2R R2, SR_CTAid_X;
+	ISCADD R2, R2, c[0x0][0x20], 2; //R2 = ctaidx*4 + intput lowword
+	MOV R3, c[0x0][0x24];
+	ST.E [R2], R0;
+	EXIT;
+!EndKernel
+
+!Kernel kkk
+!Param 8 2
+!Param 4
+	MOV R1, c[0x1][0x100];
+	S2R R0, SR_VirtCfg;
+	BFE R0, R0, 0x914;
+	MOV R2, c[0x0][0x20];
+	MOV R3, c[0x0][0x24];
+	ST.E [R2], R0;
+	EXIT;
+!EndKernel

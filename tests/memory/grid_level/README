@@ -1,6 +1,6 @@
 Test for single-block peak memory throughput
 
-make run1: 28 LDs per iteration, 1 64-bit Address register
+make run1: 16 LDs per iteration, 1 64-bit Address register
 make run2: 26 LDs per iteration, 2 64-bit Address register
 make run3: 24 LDs per iteration, 3 64-bit Address register
 
@@ -9,9 +9,32 @@ make run1 MAIN=mainEQ: 32K L1
 make run1 MAIN=mainSM: 16K L1
 
 make run1cg: similar to run1, but all LDs use .CG modifier (cache global)
+make run2cg: similar to run1cg, but all LDs now use LD.64
+make run4cg: similar to run1cg, but all LDs now use LD.128
 
 Results:
 Device is a GTX 480, clocks unknown
 1. All 3 tests(run1, run2, run3) achieve a peak throughput of roughly 20.7 to 20.8 GB/s
 2. mainSM and mainEQ are slightly faster than mainL1
 3. run1cg achieved highest throughput of 21.4 GB/s
+4. One LD.64 followed by 34 other instructions 150.0GB/s
+   One LD.64 followed by 32 other instructions 156.1GB/s
+   One LD.64 followed by 31 other instructions 156.8GB/s (max 156.95 achieved)
+   One LD.64 followed by 30 other instructions 156.5GB/s
+   One LD.64 followed by 29 other instructions 156.7GB/s
+   One LD.64 followed by 28 other instructions 155.6GB/s
+
+5. Original LD.32 followed by only a IADD achieves 155.5GB/s
+   One LD.32 followed by 17 other instructions 145.4GB/s
+   One LD.32 followed by 16 other instructions 151.2GB/s
+   One LD.32 followed by 15 other instructions 154.6GB/s
+   One LD.32 followed by 14 other instructions 156.4GB/s
+   One LD.32 followed by 13 other instructions 156.4GB/s, greater fluctuation
+
+6. Original LD128 followed by only a IADD achieves 156.3
+   One LD.128 followed by 61 other instructions 157.0GB/s
+   One LD.128 followed by 62 other instructions 157.4GB/s(max), greater fluctuation
+   One LD.128 followed by 63 other instructions 157.4GB/s
+   One LD.128 followed by 64 other instructions 157.2GB/s
+   One LD.128 followed by 65 other instructions 156.6GB/s
+   One LD.128 followed by 66 other instructions 155.4GB/s

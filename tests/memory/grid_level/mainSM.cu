@@ -94,7 +94,6 @@ int main( int argc, char** argv)
 	{
 		tcount = atoi(argv[4]);
 	}
-	int* cpu_output=new int[length];
 	int size = sizeof(int)*length;
 	int interval = 1;
 	if(argc>=6)
@@ -119,6 +118,9 @@ int main( int argc, char** argv)
 	CUdeviceptr gpu_output;
 	CUdevice device;
 	CUcontext context;
+	CUmodule module;
+	CUfunction kernel;
+	CUevent eStart, eStop;
 
 	muRC(100, cuInit(0));
 	muRC(95, cuDeviceGet(&device, 0));
@@ -127,50 +129,30 @@ int main( int argc, char** argv)
 	//muRC(91, cuCtxSetCacheConfig(CU_FUNC_CACHE_PREFER_L1));
 	muRC(90, cuMemAlloc(&gpu_output, size));
 
-	CUevent eStart, eStop;
 	muRC(89, cuEventCreate(&eStart, CU_EVENT_DEFAULT));
 	muRC(88, cuEventCreate(&eStop, CU_EVENT_DEFAULT));
-	CUmodule module;
-	CUfunction kernel;
-	CUresult result = cuModuleLoad(&module, argv[1]);
-	muRC(0 , result);
-	result = cuModuleGetFunction(&kernel, module, argv[2]);
-	muRC(1, result); 
-	int param = 0x1010;
+	muRC(0, cuModuleLoad(&module, argv[1]));
+	muRC(1, cuModuleGetFunction(&kernel, module, argv[2]));
+
 	muRC(2, cuParamSetSize(kernel, 20));
 	muRC(3, cuParamSetv(kernel, 0, &gpu_output, 8));
-	muRC(3, cuParamSetv(kernel, 16, &param, 4));
 	muRC(4, cuFuncSetBlockShape(kernel, tcount,1,1));
 
 	muRC(41, cuEventRecord(eStart,0) );
-	muRC(5, cuLaunch(kernel));
+	muRC(5, cuLaunchGrid(kernel, 150, 1));
 	muRC(51, cuEventRecord(eStop,0) );
 
-	muRC(6, cuMemcpyDtoH(cpu_output, gpu_output, size));
 	muRC(7, cuCtxSynchronize());
 	float time;
 	muRC(75, cuEventElapsedTime(&time, eStart, eStop)); 
+
 	printf("length=%i\n", length);
 	printf("tcount=%i\n", tcount);
 	printf("time=%f\n", time);
-	for(int i=0; i<length/interval; i++)
-	{
-		if(i%2==0)
-		{
-			if(!even) continue;
-		}
-		else
-		{
-			if(!odd) continue;
-		}
-		for(int j=0; j<interval; j++)
-			printf("i=%i, j=%i, output=%i\n", i, j, cpu_output[i*interval+j]);
-		if(interval!=1)
-			puts("");
-	}
+	printf("Allocation = %x, size = %x\n", gpu_output, size);
+	
 	muRC(8, cuModuleUnload(module));
 	muRC(9, cuMemFree(gpu_output));
 	muRC(10, cuCtxDestroy(context));
-	delete[] cpu_output;
 	return 0;
 }

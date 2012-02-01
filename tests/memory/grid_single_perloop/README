@@ -1,0 +1,20 @@
+Test for grid-level peak memory throughput
+In this test one loop contains only 1 to 2 LDs
+
+make run1cg: One loop has 2 LDs
+make run2cg: similar to run1cg, but all LDs now use LD.64
+make run4cg: similar to run1cg, but all LDs now use LD.128
+
+make run1cg: MAIN=mainL1: 48K L1
+make run1cg: MAIN=mainEQ: 32K L1
+make run1cg: MAIN=mainSM: 16K L1
+
+Results:
+Device is a GTX 480, clocks unknown
+1. All 3 tests(run1, run2, run3) achieve a peak throughput of roughly 20.7 to 20.8 GB/s
+2. mainSM and mainEQ are slightly faster than mainL1
+3. run1cg achieved highest throughput of 21.4 GB/s
+
+7. One LD.128 followed by 63 instructions: 157.9GB/s (count everything including BRA: 64) (max 158.0GB/s)
+   One LD.128 followed by 64 instructions: 158.2GB/s(max)
+   One LD.128 followed by 65 instructions: 157.0GB/s(max)

@@ -38,3 +38,5 @@ Device is a GTX 480, clocks unknown
    One LD.128 followed by 64 other instructions 157.2GB/s
    One LD.128 followed by 65 other instructions 156.6GB/s
    One LD.128 followed by 66 other instructions 155.4GB/s
+ 
+4cg has been modified. Number of LDs per loop has been reduced to 1. To obtain the result in 6. there should be 4 LDs per loop

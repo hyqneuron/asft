@@ -8,6 +8,8 @@ set smartindent
 set hlsearch
 set autochdir
 set clipboard=unnamed
+set go-=T
+map <F5> :NERDTreeToggle<CR>
 filetype plugin on
 command! ReloadVIMRC source $MYVIMRC
 command! EditVIMRC tabe ~/.vimrc

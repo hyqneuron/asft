@@ -1,0 +1,21 @@
+README
+
+make test BLOCKS=_num_of_blocks_
+
+the kernel loaded (loadee) is built from loadee.cu, which simply writes tid to output[tid]
+
+loader kernel arguments: output_addr, loadee_addr, flag_addr, container_addr, loadee_size
+0x20, 8: output_addr: device address for loadee to use, loader also uses this to output LEPC result
+0x28, 8: loadee_addr: device address of loadee kernel 
+0x30, 8: flag_addr  : device address containing the write flag 
+0x38, 4: container_addr: the address of the kernel container in instruction space
+0x3c, 4: loadee_size: size of loadee kernel, currently 0x50
+
+
+loader.asf:
+when flag == -1, return target LEPC result
+
+when flag == 0
+	block 0: load loadee, set flag, jump to container_addr
+	other blocks: load flag and check flag
+when flag == 1, jump to container_addr

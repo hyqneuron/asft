@@ -1,0 +1,2 @@
+trivial_for: a single-thread for-loop. vectory-multiply kernel
+block_for:   a for loop launched with one block. vector-multiply kernel

@@ -1,0 +1,11 @@
+A: alternate
+CScope
+NERDTree: file system browser
+OmniCppComplete
+pathogen: package manager
+snipMate: snippet expander
+SuperTab
+
+=====Optional=====
+clang_complete
+GCCSense
